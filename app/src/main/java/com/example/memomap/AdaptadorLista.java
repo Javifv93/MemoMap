@@ -67,6 +67,10 @@ public class AdaptadorLista extends ArrayAdapter<String> {
                 intnt.putExtra("id", listaNotas.get(position).getId());
                 intnt.putExtra("titulo",listaNotas.get(position).getTitulo());
                 intnt.putExtra("texto",listaNotas.get(position).getTexto());
+                System.out.println("============================");
+                System.out.println("onClick adaptador: -id: "+ listaNotas.get(position).getId() +
+                        " titulo: "+ listaNotas.get(position).getTitulo() + " texto: " + listaNotas.get(position).getTexto());
+                System.out.println("============================");
                 activity.setResult(2,intnt);
                 activity.startActivity(intnt);
             }
@@ -96,7 +100,13 @@ public class AdaptadorLista extends ArrayAdapter<String> {
     /**Devuelve un objeto Nota en base a la String con los datos proporcionados por las SP*/
     protected Nota obtenerNota(String registro_nota){
         ControladorRW crw = new ControladorRW();
-        String texto = crw.leerArchivo(activity,registro_nota);
+        String texto = crw.leerArchivo(activity,registro_nota, ControladorRW.Memoria.INTERNA);
+        System.out.println("============================");
+        System.out.println("obtenerNota de Pagina: String texto" + texto);
+        System.out.println("============================");
+        System.out.println("============================");
+        System.out.println("obtenerNota de Pagina: split registro_nota" +Integer.parseInt(registro_nota.split("#")[1]) + registro_nota.split("#")[0] + texto);
+        System.out.println("============================");
         Nota nota = new Nota(Integer.parseInt(registro_nota.split("#")[1]),registro_nota.split("#")[0], texto);
         return nota;
     }

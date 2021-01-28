@@ -30,6 +30,9 @@ public class ControladorRW {
 
     public String leerArchivo(Activity activity, String registro_nota, Memoria tipoMemoria){
         lectura = new ClaseLectura();
+        System.out.println("============================");
+        System.out.println("leerArchivo "+ registro_nota);
+        System.out.println("============================");
         String texto = "";
         try {
             switch (tipoMemoria){
@@ -37,7 +40,7 @@ public class ControladorRW {
                 case EXTERNA: texto = lectura.leerMemExterna(registro_nota); break;
                 case COMPARTIDA: texto = lectura.leerMemCompartida(registro_nota); break;
                 case RAW: texto = lectura.leerMemRAW(activity); break;
-                case SD: texto = lectura.leerSD(activity, registro_nota); break;
+                case SD: texto = lectura.leerMemSD(activity, registro_nota); break;
             }
         } catch (FileNotFoundException e) {
             System.out.println("Error al acceder al archivo");
@@ -50,21 +53,20 @@ public class ControladorRW {
     }
     public boolean escribirArchivo(Activity activity,String nombreArchivo, String json, Memoria tipoMemoria){
         boolean todoOk = false;
-        try {
-            switch (tipoMemoria){
-                case INTERNA: escritura.escribirMemInterna(); break;
-                case EXTERNA: ; break;
-                case COMPARTIDA: ; break;
-                case RAW: break;
-                case SD: break;
+        escritura = new ClaseEscritura();
+        switch (tipoMemoria){
+            case INTERNA: {
+                System.out.println("============================");
+                System.out.println("escribirArchivo "+ json);
+                System.out.println("============================");
+                todoOk = escritura.escribirMemInterna(activity, nombreArchivo, json);
+                break;
             }
-            OutputStreamWriter output = new OutputStreamWriter(activity.openFileOutput(nombreArchivo+".txt", Context.MODE_PRIVATE));
-            output.write(json);
-            output.close();
-            todoOk = true;
-        } catch (IOException e) {
-            System.out.println("Error al escribir el archivo");
-            e.printStackTrace();
+            case EXTERNA: ; break;
+            case COMPARTIDA: ; break;
+            case RAW: break;
+            case SD: break;
         }
+        return todoOk;
     }
 }

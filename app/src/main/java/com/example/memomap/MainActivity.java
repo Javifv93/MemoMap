@@ -31,8 +31,6 @@ public class MainActivity extends AppCompatActivity {
         listView = (ListView) findViewById(R.id.main_listview);
         mainMas = (ImageButton) findViewById(R.id.main_mas);
 
-        sp_a_ArrayList();
-
         mainMas.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -48,16 +46,6 @@ public class MainActivity extends AppCompatActivity {
         if(requestCode == 2)
         {
 
-        }
-    }
-    protected void sp_a_ArrayList(){
-        SharedPreferences sp = getSharedPreferences("registroNotas",Context.MODE_PRIVATE);
-        String registro = sp.getString("registro",null);
-        if(registro!=null){
-            String[] registro_split = registro.split("%");
-            for(int x=0;x<registro_split.length;x++){
-                listaNotas.add(registro_split[x]);
-            }
         }
     }
     @Override
@@ -80,7 +68,18 @@ public class MainActivity extends AppCompatActivity {
     protected String obtenerRegistroSP(){
         SharedPreferences sp = getSharedPreferences("registroNotas",Context.MODE_PRIVATE);
         String registro = sp.getString("registro",null);
+        sp_a_ArrayList(registro);
         return registro;
+    }
+    /**Convierte el registro de las SharedPreferences en una lista de objetos Nota*/
+    protected void sp_a_ArrayList(String registro){
+        listaNotas = new ArrayList<String>();
+        if(registro!=null){
+            String[] registro_split = registro.split("%");
+            for(int x=0;x<registro_split.length;x++){
+                listaNotas.add(registro_split[x]);
+            }
+        }
     }
     protected void seekAndDestroy(){
 

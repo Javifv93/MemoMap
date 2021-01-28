@@ -57,6 +57,12 @@ public class Pagina extends AppCompatActivity {
                     System.out.println("===========================================================================");*/
                     notaActiva = new Nota(getIntent().getIntExtra("id",-1),getIntent().getStringExtra("titulo"),getIntent().getStringExtra("texto"));
                     titulo.setText(notaActiva.getTitulo());
+                    System.out.println("============================");
+                    System.out.println("recibirIntent "+ notaActiva.getTexto());
+                    System.out.println("============================");
+                    System.out.println("============================");
+                    System.out.println("recibirIntent "+ serializador.objeto_to_json(notaActiva.getTexto()));
+                    System.out.println("============================");
                     texto.setText(serializador.json_to_objeto(notaActiva.getTexto()).getTexto());
                 }
             }
@@ -85,7 +91,7 @@ public class Pagina extends AppCompatActivity {
     /**Crea el archivo en base al nombre y escribe la cadena json en el*/
     protected boolean escribirFichero(String json, String nombreArchivo){
         ControladorRW crw = new ControladorRW();
-        return crw.escribirArchivo(Pagina.this, nombreArchivo, json);
+        return crw.escribirArchivo(Pagina.this, nombreArchivo, json, ControladorRW.Memoria.INTERNA);
     }
     /**Guarda en las SharedPreferences una String con los nombres de archivos concatenados*/
     protected void guardarRegistroSP(String nombreArchivo){
