@@ -12,6 +12,11 @@ public class Nota {
         this.titulo=titulo;
         this.texto=texto;
     }
+    public Nota(int id, String titulo, String texto){
+        this.id=id;
+        this.titulo=titulo;
+        this.texto=texto;
+    }
     public int getId(){return id;}
     public String getTitulo(){return titulo;}
     public String getTexto(){return texto;}
@@ -25,6 +30,6 @@ public class Nota {
     public void setTexto(String texto) {this.texto = texto;}
     /**Devuelve un nombre de archivo basado en el título y el id*/
     public String generarNombreArchivo(){
-        return titulo + Integer.toString(id);
+        return titulo + "#" + Integer.toString(id);
     }
 }

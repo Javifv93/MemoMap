@@ -9,22 +9,26 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
+
 import java.util.ArrayList;
 
 public class AdaptadorLista extends ArrayAdapter<String> {
     private Activity activity;
-    ArrayList<String> listaContactos;
+    private ArrayList<Nota> listaNotas;
+    private ArrayList<String> registroNotas;
     final ViewHolder viewHolder = new ViewHolder();
     View vista;
 
-    public AdaptadorLista(Activity activity, ArrayList<String> listaContactos){
+    public AdaptadorLista(Activity activity, String registro_sp){
         super(activity, R.layout.nota);
         this.activity = activity;
-        this.listaContactos = listaContactos;
+        this.registroNotas = new ArrayList<String>();
+        this.listaNotas = new ArrayList<Nota>();
+        String[] registro_split = registro_sp.split("%");
+        for(int x=0;x<registro_split.length;x++){
+            this.registroNotas.add(registro_split[x]);
+            listaNotas.add(obtenerNota(registro_split[x]));
+        }
     }
 
     static class ViewHolder{
@@ -35,7 +39,7 @@ public class AdaptadorLista extends ArrayAdapter<String> {
     }
 
     public int getCount(){
-        return listaContactos.size();
+        return listaNotas.size();
     }
 
     public long getItemId(int position){
@@ -53,34 +57,16 @@ public class AdaptadorLista extends ArrayAdapter<String> {
         viewHolder.notaEdit = (ImageButton) view.findViewById(R.id.nota_edit);
         viewHolder.notaBorrar = (ImageButton) view.findViewById(R.id.nota_borrar);
 
-        String nombre = listaContactos.get(position);
-        viewHolder.notaNombre.setText(nombre);
+        viewHolder.notaNombre.setText(listaNotas.get(position).getTitulo());
 
-        // TODO: 25/01/2021 Al clickar en el elemento lo abrirá
+        /**Listener que envia los atributos id, titulo y texto de la Nota asignada a esta posición en listaNotas a Pagina.java, en la cual se visualizará*/
         viewHolder.notaFondo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String titulo = viewHolder.notaNombre.getText().toString();
-                String texto = "";
-                try {
-                    BufferedReader br = new BufferedReader(new InputStreamReader(activity.openFileInput(titulo+".txt")));
-                    String linea = null;
-                    while((linea = br.readLine()) != null) {
-                        texto += linea;
-                    }
-                    br.close();
-                } catch (FileNotFoundException e) {
-                    Toast tostada = Toast.makeText(v.getContext(), "Error al acceder al archivo", Toast.LENGTH_SHORT);
-                    tostada.show();
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    Toast tostada = Toast.makeText(v.getContext(), "Error al leer el archivo", Toast.LENGTH_SHORT);
-                    tostada.show();
-                    e.printStackTrace();
-                }
                 Intent intnt = new Intent(v.getContext(),Pagina.class);
-                intnt.putExtra("titulo",titulo);
-                intnt.putExtra("texto",texto);
+                intnt.putExtra("id", listaNotas.get(position).getId());
+                intnt.putExtra("titulo",listaNotas.get(position).getTitulo());
+                intnt.putExtra("texto",listaNotas.get(position).getTexto());
                 activity.setResult(2,intnt);
                 activity.startActivity(intnt);
             }
@@ -107,5 +93,11 @@ public class AdaptadorLista extends ArrayAdapter<String> {
         });
         return view;
     }
-
+    /**Devuelve un objeto Nota en base a la String con los datos proporcionados por las SP*/
+    protected Nota obtenerNota(String registro_nota){
+        ControladorRW crw = new ControladorRW();
+        String texto = crw.leerArchivo(activity,registro_nota);
+        Nota nota = new Nota(Integer.parseInt(registro_nota.split("#")[1]),registro_nota.split("#")[0], texto);
+        return nota;
+    }
 }
