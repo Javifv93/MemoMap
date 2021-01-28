@@ -17,6 +17,7 @@ public class AdaptadorLista extends ArrayAdapter<String> {
     private ArrayList<Nota> listaNotas;
     private ArrayList<String> registroNotas;
     final ViewHolder viewHolder = new ViewHolder();
+    private ControladorRW.Memoria memoria = ControladorRW.Memoria.COMPARTIDA;
     View vista;
 
     public AdaptadorLista(Activity activity, String registro_sp){
@@ -100,14 +101,10 @@ public class AdaptadorLista extends ArrayAdapter<String> {
     /**Devuelve un objeto Nota en base a la String con los datos proporcionados por las SP*/
     protected Nota obtenerNota(String registro_nota){
         ControladorRW crw = new ControladorRW();
-        String texto = crw.leerArchivo(activity,registro_nota, ControladorRW.Memoria.INTERNA);
-        System.out.println("============================");
-        System.out.println("obtenerNota de Pagina: String texto" + texto);
-        System.out.println("============================");
-        System.out.println("============================");
-        System.out.println("obtenerNota de Pagina: split registro_nota" +Integer.parseInt(registro_nota.split("#")[1]) + registro_nota.split("#")[0] + texto);
-        System.out.println("============================");
+        String texto = crw.leerArchivo(activity,registro_nota, memoria);
         Nota nota = new Nota(Integer.parseInt(registro_nota.split("#")[1]),registro_nota.split("#")[0], texto);
         return nota;
     }
 }
+// TODO: 29/01/2021 https://www.sgoliver.net/blog/ficheros-en-android-i-memoria-interna/ Para las preguntas
+// TODO: 29/01/2021 https://developer.android.com/training/data-storage

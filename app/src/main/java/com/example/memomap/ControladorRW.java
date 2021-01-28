@@ -55,15 +55,9 @@ public class ControladorRW {
         boolean todoOk = false;
         escritura = new ClaseEscritura();
         switch (tipoMemoria){
-            case INTERNA: {
-                System.out.println("============================");
-                System.out.println("escribirArchivo "+ json);
-                System.out.println("============================");
-                todoOk = escritura.escribirMemInterna(activity, nombreArchivo, json);
-                break;
-            }
+            case INTERNA: todoOk = escritura.escribirMemInterna(activity, nombreArchivo, json); break;
             case EXTERNA: ; break;
-            case COMPARTIDA: ; break;
+            case COMPARTIDA: todoOk = escritura.escribirMemCompartida(nombreArchivo, json);
             case RAW: break;
             case SD: break;
         }

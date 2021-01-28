@@ -18,6 +18,7 @@ public class Pagina extends AppCompatActivity {
     private EditText texto;
     private Button guardar;
     private Nota notaActiva;
+    private ControladorRW.Memoria memoria = ControladorRW.Memoria.COMPARTIDA;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +92,7 @@ public class Pagina extends AppCompatActivity {
     /**Crea el archivo en base al nombre y escribe la cadena json en el*/
     protected boolean escribirFichero(String json, String nombreArchivo){
         ControladorRW crw = new ControladorRW();
-        return crw.escribirArchivo(Pagina.this, nombreArchivo, json, ControladorRW.Memoria.INTERNA);
+        return crw.escribirArchivo(Pagina.this, nombreArchivo, json, memoria);
     }
     /**Guarda en las SharedPreferences una String con los nombres de archivos concatenados*/
     protected void guardarRegistroSP(String nombreArchivo){
