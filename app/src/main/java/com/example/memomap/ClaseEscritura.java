@@ -44,11 +44,23 @@ public class ClaseEscritura {
         System.out.println("escritura AbsolutePath: " + sd.getAbsolutePath());
         System.out.println("escritura: " + sd.getAbsolutePath());
         System.out.println("============================");
+        System.out.println("============================");
+        System.out.println("Puede escribir??" + sd.canWrite());
+        System.out.println("============================");
+        System.out.println("============================");
+        System.out.println("Puede escribir??" + sd.canWrite());
+        System.out.println("============================");
         if(sd.canWrite()){
             try {
+                System.out.println("============================");
+                System.out.println("escribirMemCompartida: Va  a escribir");
+                System.out.println("============================");
                 File f = new File(sd, nombreArchivo + ".txt");
                 bw = new BufferedWriter(new FileWriter(f));
                 bw.write(json);
+                System.out.println("============================");
+                System.out.println("escribirMemCompartida: Archivo escrito");
+                System.out.println("============================");
                 bw.flush();
                 bw.close();
                 todoOk = true;

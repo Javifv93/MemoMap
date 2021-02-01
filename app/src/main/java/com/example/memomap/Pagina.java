@@ -92,6 +92,9 @@ public class Pagina extends AppCompatActivity {
     /**Crea el archivo en base al nombre y escribe la cadena json en el*/
     protected boolean escribirFichero(String json, String nombreArchivo){
         ControladorRW crw = new ControladorRW();
+        System.out.println("============================");
+        System.out.println("escribirFichero: " + nombreArchivo);
+        System.out.println("============================");
         return crw.escribirArchivo(Pagina.this, nombreArchivo, json, memoria);
     }
     /**Guarda en las SharedPreferences una String con los nombres de archivos concatenados*/
@@ -100,6 +103,9 @@ public class Pagina extends AppCompatActivity {
         SharedPreferences.Editor sp_editor = sp.edit();
 
         String registro = sp.getString("registro",null);
+        System.out.println("============================");
+        System.out.println("guardarRegistroSP: " + registro);
+        System.out.println("============================");
         if(registro!=null){
             sp_editor.putString("registro",registro + nombreArchivo +"%");
         }
