@@ -17,7 +17,7 @@ public class AdaptadorLista extends ArrayAdapter<String> {
     private ArrayList<Nota> listaNotas;
     private ArrayList<String> registroNotas;
     final ViewHolder viewHolder = new ViewHolder();
-    private ControladorRW.Memoria memoria = ControladorRW.Memoria.COMPARTIDA;
+    private ControladorRW.Memoria memoria = ControladorRW.Memoria.EXTERNA;
     View vista;
 
     public AdaptadorLista(Activity activity, String registro_sp){

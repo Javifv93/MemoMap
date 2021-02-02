@@ -24,7 +24,7 @@ import java.io.OutputStreamWriter;
 public class ControladorRW {
     private ClaseLectura lectura;
     private ClaseEscritura escritura;
-    public enum Memoria {INTERNA, EXTERNA, COMPARTIDA, RAW, SD}
+    public enum Memoria {INTERNA, EXTERNA, RAW, SD}
 
     public ControladorRW(){};
 
@@ -38,7 +38,7 @@ public class ControladorRW {
             switch (tipoMemoria){
                 case INTERNA: texto = lectura.leerMemInterna(activity,registro_nota); break;
                 case EXTERNA: texto = lectura.leerMemExterna(registro_nota); break;
-                case COMPARTIDA: texto = lectura.leerMemCompartida(registro_nota); break;
+                //case COMPARTIDA: texto = lectura.leerMemCompartida(registro_nota); break;
                 case RAW: texto = lectura.leerMemRAW(activity); break;
                 case SD: texto = lectura.leerMemSD(activity, registro_nota); break;
             }
@@ -56,8 +56,8 @@ public class ControladorRW {
         escritura = new ClaseEscritura();
         switch (tipoMemoria){
             case INTERNA: todoOk = escritura.escribirMemInterna(activity, nombreArchivo, json); break;
-            case EXTERNA: ; break;
-            case COMPARTIDA: todoOk = escritura.escribirMemCompartida(nombreArchivo, json);
+            case EXTERNA: todoOk = escritura.escribirMemExterna(nombreArchivo, json); break;
+            //case COMPARTIDA: todoOk = escritura.escribirMemCompartida(nombreArchivo, json);
             case RAW: break;
             case SD: break;
         }

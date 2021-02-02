@@ -7,6 +7,7 @@ import android.os.Environment;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -32,13 +33,38 @@ public class ClaseEscritura {
         }
         return todoOk;
     }
-    public boolean escribirMemExterna(){
-
+    public boolean escribirMemExterna(String nombreArchivo, String json){
+        /*todoOk=false;
+        System.out.println("============================");
+        System.out.println("Vamos a ver si estan llegando bien los datos:\r nombreArchivo: "+ nombreArchivo+"\rjosn: "+json);
+        System.out.println("============================");
+        File dir = new File(sd.getAbsolutePath() + "/dat");
+        System.out.println("============================");
+        System.out.println("A ver si guarda bien el directorio: "+ sd.getAbsolutePath() + "/dat");
+        System.out.println("============================");
+        boolean vaono;
+        vaono = dir.mkdirs();
+        System.out.println("============================");
+        System.out.println("mkdirs "+ vaono +"    "+"/" + nombreArchivo+".txt");
+        System.out.println("============================");
+        File file = new File (dir,"//" + nombreArchivo+".txt");
+        try {
+            file.createNewFile();
+            OutputStreamWriter output = new OutputStreamWriter(new FileOutputStream(file));
+            output.write(json);
+            output.flush();
+            output.close();
+            todoOk = true;
+        } catch (IOException e) {
+            System.out.println("Error al escribir el archivo");
+            e.printStackTrace();
+        }
+*/
         return todoOk;
     }
 
-    // TODO: 29/01/2021 No se sabe si no lee o no escribe, hay q mirar donde falla 
-    public boolean escribirMemCompartida(String nombreArchivo, String json){
+    // TODO: 29/01/2021 El lector de ClaseLectura no funciona
+    /*public boolean escribirMemCompartida(String nombreArchivo, String json){
         todoOk = false;
         System.out.println("============================");
         System.out.println("escritura AbsolutePath: " + sd.getAbsolutePath());
@@ -70,7 +96,7 @@ public class ClaseEscritura {
             }
         }
         return todoOk;
-    }
+    }*/
     public boolean escribirMemRAW(){
         return todoOk;
     }

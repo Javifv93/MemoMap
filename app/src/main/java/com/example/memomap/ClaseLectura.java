@@ -7,6 +7,7 @@ import android.os.Environment;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -17,11 +18,13 @@ public class ClaseLectura {
     private BufferedReader br;
     private boolean sdDisponible;
     private boolean sdAcceseoEscritura;
-    private File sd = Environment.getExternalStorageDirectory();
+    private File sd;
     private Resources recurso;
     private String texto;
 
-    public ClaseLectura(){}
+    public ClaseLectura(){
+        sd = Environment.getExternalStorageDirectory();
+    }
 
     public String leerMemInterna(Activity activity, String registro_nota) throws IOException {
         texto = "";
@@ -39,11 +42,22 @@ public class ClaseLectura {
         System.out.println("============================");
         return texto;
     }
-    public String leerMemExterna(String registro_nota){
+    public String leerMemExterna(String registro_nota) throws IOException {
+        texto = "";
+        File dir = new File (sd.getAbsolutePath() + "/dat");
+        File archivoLectura = new File(dir, registro_nota + ".txt");
+        if(archivoLectura.exists()){
+            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(archivoLectura)));
+            String linea = null;
+            while((linea = br.readLine())!=null){
+                texto += linea;
+            }
+            br.close();
+        }
         return texto;
     }
-    // TODO: 29/01/2021 No se sabe si no lee o no escribe, hay q mirar donde falla
-    public String leerMemCompartida(String registro_nota) throws IOException {
+    // TODO: 29/01/2021 sd.canRead() devuelve false siempre
+    /*public String leerMemCompartida(String registro_nota) throws IOException {
         System.out.println("============================");
         System.out.println("lectura AbsolutePath: " + sd.getAbsolutePath());
         System.out.println("lectura: " + sd.getAbsolutePath());
@@ -64,7 +78,7 @@ public class ClaseLectura {
         System.out.println("lectura textp:" + texto);
         System.out.println("============================");
         return texto;
-    }
+    }*/
     public String leerMemRAW(Activity activity){
         return texto;
     }

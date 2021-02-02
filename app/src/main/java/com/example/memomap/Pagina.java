@@ -18,7 +18,7 @@ public class Pagina extends AppCompatActivity {
     private EditText texto;
     private Button guardar;
     private Nota notaActiva;
-    private ControladorRW.Memoria memoria = ControladorRW.Memoria.COMPARTIDA;
+    private ControladorRW.Memoria memoria = ControladorRW.Memoria.EXTERNA;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
