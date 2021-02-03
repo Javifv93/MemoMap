@@ -3,6 +3,9 @@ package com.example.memomap;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Environment;
+import android.view.View;
+
+import androidx.core.content.ContextCompat;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -14,6 +17,8 @@ import java.io.OutputStreamWriter;
 
 public class ClaseEscritura {
     private boolean todoOk;
+    private boolean sdDisponible = false;
+    private boolean sdAccesoEscritura = false;
     private BufferedWriter bw;
     private File sd = Environment.getExternalStorageDirectory();
 
@@ -34,18 +39,19 @@ public class ClaseEscritura {
         return todoOk;
     }
     public boolean escribirMemExterna(String nombreArchivo, String json){
+
         /*todoOk=false;
         System.out.println("============================");
         System.out.println("Vamos a ver si estan llegando bien los datos:\r nombreArchivo: "+ nombreArchivo+"\rjosn: "+json);
         System.out.println("============================");
-        File dir = new File(sd.getAbsolutePath() + "/dat");
+        File dir = new File("/storage/emulated/1");
         System.out.println("============================");
-        System.out.println("A ver si guarda bien el directorio: "+ sd.getAbsolutePath() + "/dat");
+        System.out.println("A ver si guarda bien el directorio: "+"/storage/emulated/1" + "/dat");
         System.out.println("============================");
         boolean vaono;
-        vaono = dir.mkdirs();
+        vaono = dir.mkdir();
         System.out.println("============================");
-        System.out.println("mkdirs "+ vaono +"    "+"/" + nombreArchivo+".txt");
+        System.out.println("/" + nombreArchivo+".txt");
         System.out.println("============================");
         File file = new File (dir,"//" + nombreArchivo+".txt");
         try {
@@ -58,8 +64,8 @@ public class ClaseEscritura {
         } catch (IOException e) {
             System.out.println("Error al escribir el archivo");
             e.printStackTrace();
-        }
-*/
+        }*/
+
         return todoOk;
     }
 
@@ -100,7 +106,43 @@ public class ClaseEscritura {
     public boolean escribirMemRAW(){
         return todoOk;
     }
-    public boolean escribirMemSD(){
+    public boolean escribirMemSD(Activity activity, String nombreArchivo,String json){
+        EstadoSD();
+        System.out.println("============================");
+        System.out.println("sdDisponible: "+ sdDisponible+"\rsdAccesoEscritura: "+sdAccesoEscritura);
+        System.out.println("============================");
+        File[] Memoria = ContextCompat.getExternalFilesDirs(activity.getApplicationContext(), null);
+        File ruta = Memoria[0];
+        File file = new File(ruta.getAbsolutePath(), nombreArchivo + ".txt");
+        try {
+            OutputStreamWriter output = new OutputStreamWriter(new FileOutputStream(file));
+            output.write(json);
+            output.close();
+            todoOk = true;
+            System.out.println("============================");
+            System.out.println("TERMINO");
+            System.out.println("============================");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return todoOk;
+    }
+    public void EstadoSD(){
+        String cadena = "";
+        String estado = Environment.getExternalStorageState();
+        if(estado.equals(Environment.MEDIA_MOUNTED)){
+            sdDisponible = true;
+            sdAccesoEscritura = true;
+        }
+        else if(estado.equals(Environment.MEDIA_MOUNTED_READ_ONLY)){
+            sdDisponible = true;
+            sdAccesoEscritura = false;
+        }
+        else{
+            sdDisponible = false;
+            sdAccesoEscritura = false;
+        }
     }
 }

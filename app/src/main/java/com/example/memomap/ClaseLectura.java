@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.res.Resources;
 import android.os.Environment;
 
+import androidx.core.content.ContextCompat;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -17,7 +19,7 @@ import java.io.InputStreamReader;
 public class ClaseLectura {
     private BufferedReader br;
     private boolean sdDisponible;
-    private boolean sdAcceseoEscritura;
+    private boolean sdAccesoEscritura;
     private File sd;
     private Resources recurso;
     private String texto;
@@ -82,7 +84,31 @@ public class ClaseLectura {
     public String leerMemRAW(Activity activity){
         return texto;
     }
-    public String leerMemSD(Activity activity, String registro_nota){
+    public String leerMemSD(Activity activity, String registro_nota) throws IOException {
+        EstadoSD();
+        texto = "";
+        File[]Memoria = ContextCompat.getExternalFilesDirs(activity.getApplicationContext(),null);
+        File ruta = Memoria[0];
+        File file = new File(ruta.getAbsolutePath(), registro_nota + ".txt");
+        br = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+        texto = br.readLine();
+        br.close();
         return texto;
+    }
+    public void EstadoSD(){
+        String cadena = "";
+        String estado = Environment.getExternalStorageState();
+        if(estado.equals(Environment.MEDIA_MOUNTED)){
+            sdDisponible = true;
+            sdAccesoEscritura = true;
+        }
+        else if(estado.equals(Environment.MEDIA_MOUNTED_READ_ONLY)){
+            sdDisponible = true;
+            sdAccesoEscritura = false;
+        }
+        else{
+            sdDisponible = false;
+            sdAccesoEscritura = false;
+        }
     }
 }

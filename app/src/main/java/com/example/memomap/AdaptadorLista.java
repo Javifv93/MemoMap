@@ -17,7 +17,7 @@ public class AdaptadorLista extends ArrayAdapter<String> {
     private ArrayList<Nota> listaNotas;
     private ArrayList<String> registroNotas;
     final ViewHolder viewHolder = new ViewHolder();
-    private ControladorRW.Memoria memoria = ControladorRW.Memoria.EXTERNA;
+    private ControladorRW.Memoria memoria = ControladorRW.Memoria.SD;
     View vista;
 
     public AdaptadorLista(Activity activity, String registro_sp){
@@ -29,6 +29,9 @@ public class AdaptadorLista extends ArrayAdapter<String> {
         for(int x=0;x<registro_split.length;x++){
             this.registroNotas.add(registro_split[x]);
             listaNotas.add(obtenerNota(registro_split[x]));
+            System.out.println("============================");
+            System.out.println("obteniendo nota!");
+            System.out.println("============================");
         }
     }
 
@@ -102,6 +105,9 @@ public class AdaptadorLista extends ArrayAdapter<String> {
     protected Nota obtenerNota(String registro_nota){
         ControladorRW crw = new ControladorRW();
         String texto = crw.leerArchivo(activity,registro_nota, memoria);
+        System.out.println("============================");
+        System.out.println("obtenerNota:" + texto);
+        System.out.println("============================");
         Nota nota = new Nota(Integer.parseInt(registro_nota.split("#")[1]),registro_nota.split("#")[0], texto);
         return nota;
     }

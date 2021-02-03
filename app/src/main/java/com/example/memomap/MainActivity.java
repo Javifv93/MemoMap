@@ -52,8 +52,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         String registro = obtenerRegistroSP();
+        System.out.println("============================");
+        System.out.println("onResume");
+        System.out.println("============================");
         if(registro!=null)
         {
+            System.out.println("============================");
+            System.out.println("OnResume != null");
+            System.out.println("============================");
             AdaptadorLista adapter = new AdaptadorLista(MainActivity.this, registro);
             listView.setAdapter(adapter);
         }
@@ -68,6 +74,9 @@ public class MainActivity extends AppCompatActivity {
     protected String obtenerRegistroSP(){
         SharedPreferences sp = getSharedPreferences("registroNotas",Context.MODE_PRIVATE);
         String registro = sp.getString("registro",null);
+        System.out.println("============================");
+        System.out.println("obtenerRegistroSP: " + registro);
+        System.out.println("============================");
         sp_a_ArrayList(registro);
         return registro;
     }

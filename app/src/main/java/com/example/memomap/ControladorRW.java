@@ -40,7 +40,11 @@ public class ControladorRW {
                 case EXTERNA: texto = lectura.leerMemExterna(registro_nota); break;
                 //case COMPARTIDA: texto = lectura.leerMemCompartida(registro_nota); break;
                 case RAW: texto = lectura.leerMemRAW(activity); break;
-                case SD: texto = lectura.leerMemSD(activity, registro_nota); break;
+                case SD: texto = lectura.leerMemSD(activity, registro_nota);
+                    System.out.println("============================");
+                    System.out.println("texto leido:" + texto);
+                    System.out.println("============================");
+                break;
             }
         } catch (FileNotFoundException e) {
             System.out.println("Error al acceder al archivo");
@@ -59,7 +63,7 @@ public class ControladorRW {
             case EXTERNA: todoOk = escritura.escribirMemExterna(nombreArchivo, json); break;
             //case COMPARTIDA: todoOk = escritura.escribirMemCompartida(nombreArchivo, json);
             case RAW: break;
-            case SD: break;
+            case SD: todoOk = escritura.escribirMemSD(activity, nombreArchivo, json); break;
         }
         return todoOk;
     }

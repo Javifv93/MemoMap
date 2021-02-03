@@ -18,7 +18,7 @@ public class Pagina extends AppCompatActivity {
     private EditText texto;
     private Button guardar;
     private Nota notaActiva;
-    private ControladorRW.Memoria memoria = ControladorRW.Memoria.EXTERNA;
+    private ControladorRW.Memoria memoria = ControladorRW.Memoria.SD;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +86,9 @@ public class Pagina extends AppCompatActivity {
         String json = serializador.objeto_to_json(nota);
 
         if(escribirFichero(json, nota.generarNombreArchivo())==true){
+            System.out.println("============================");
+            System.out.println("HA GUARDADO LA NOTA");
+            System.out.println("============================");
             guardarRegistroSP(nota.generarNombreArchivo());
         }
     }
