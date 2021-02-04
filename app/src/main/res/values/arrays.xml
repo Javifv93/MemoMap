@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="memo_name">
+        <item>Interna</item>
+        <item>Externa</item>
+    </string-array>
+    <string-array name="memo_code">
+        <item>INTERNA</item>
+        <item>EXTERNA</item>
+    </string-array>
+</resources>

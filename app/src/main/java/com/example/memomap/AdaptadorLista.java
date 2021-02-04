@@ -1,6 +1,8 @@
 package com.example.memomap;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +19,7 @@ public class AdaptadorLista extends ArrayAdapter<String> {
     private ArrayList<Nota> listaNotas;
     private ArrayList<String> registroNotas;
     final ViewHolder viewHolder = new ViewHolder();
-    private ControladorRW.Memoria memoria = ControladorRW.Memoria.SD;
+    private ControladorRW.Memoria memoria = ControladorRW.Memoria.INTERNA;
     View vista;
 
     public AdaptadorLista(Activity activity, String registro_sp){
@@ -32,6 +34,15 @@ public class AdaptadorLista extends ArrayAdapter<String> {
             System.out.println("============================");
             System.out.println("obteniendo nota!");
             System.out.println("============================");
+        }
+        obtenerMemoria(activity);
+    }
+
+    private void obtenerMemoria(Activity activity) {
+        SharedPreferences sp = activity.getSharedPreferences("configuracion", Context.MODE_PRIVATE);
+        switch (sp.getString("lp_memoria", "INTERNA")){
+            case "Interna": memoria = ControladorRW.Memoria.INTERNA; System.out.println("===========================INTERNA===================="); break;
+            case "Externa": memoria = ControladorRW.Memoria.SD;System.out.println("===========================EXTERNA===================="); break;
         }
     }
 
@@ -85,6 +96,9 @@ public class AdaptadorLista extends ArrayAdapter<String> {
         viewHolder.notaEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                System.out.println("============================");
+                System.out.println("MEMORIA: "+ memoria);
+                System.out.println("============================");
 //                SelectorColor selectorColor = new SelectorColor();
 //                selectorColor.colorear_spectrum(v);
 //                viewHolder.notaFondo.setBackgroundColor(selectorColor.getColor());
