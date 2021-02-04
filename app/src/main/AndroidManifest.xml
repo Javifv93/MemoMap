@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:configChanges="orientation"
         android:screenOrientation="portrait"
-        android:theme="@style/Theme.MemoMap">
+        android:theme="@style/Theme.AppCompat">
         <activity android:name=".Pagina"></activity>
         <activity android:name=".MainActivity">
             <intent-filter>
