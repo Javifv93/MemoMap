@@ -2,22 +2,16 @@ package com.example.memomap;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.app.ActionBar;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.ListView;
-
-import com.google.android.material.shadow.ShadowRenderer;
-import com.google.gson.Gson;
 import java.util.ArrayList;
 
+/**Clase de la actividad principal*/
 public class MainActivity extends AppCompatActivity {
     private ListView listView;
     private ImageButton mainMas;
@@ -29,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        /**IMPLEMENTACIÓN DEL BORRADO DE LA LISTA DE NOTAS EN LAS SP*/
         limpiarSP();
 
         listView = (ListView) findViewById(R.id.main_listview);
@@ -39,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intnt = new Intent(MainActivity.this, Pagina.class);
-                startActivityForResult(intnt,2);
+                startActivity(intnt);
             }
         });
         config.setOnClickListener(new View.OnClickListener() {
@@ -52,30 +47,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == 2)
-        {
-
-        }
-    }
-    @Override
     protected void onResume() {
         super.onResume();
         String registro = obtenerRegistroSP();
-        System.out.println("============================");
-        System.out.println("onResume");
-        System.out.println("============================");
         if(registro!=null)
         {
-            System.out.println("============================");
-            System.out.println("OnResume != null");
-            System.out.println("============================");
             AdaptadorLista adapter = new AdaptadorLista(MainActivity.this, registro);
             listView.setAdapter(adapter);
         }
-        seekAndDestroy();
+        //seekAndDestroy();
     }
+    /**Método que limpia el registro de notas de las SharedPreferences, por lo cual, aunque las notas creadas ya creadas no se borran de la memoria, dejan de aparecer reflejadas en la app*/
     protected void limpiarSP(){
         SharedPreferences sp = getSharedPreferences("registroNotas", Context.MODE_PRIVATE);
         SharedPreferences.Editor sp_editor = sp.edit();
@@ -85,9 +67,6 @@ public class MainActivity extends AppCompatActivity {
     protected String obtenerRegistroSP(){
         SharedPreferences sp = getSharedPreferences("registroNotas",Context.MODE_PRIVATE);
         String registro = sp.getString("registro",null);
-        System.out.println("============================");
-        System.out.println("obtenerRegistroSP: " + registro);
-        System.out.println("============================");
         sp_a_ArrayList(registro);
         return registro;
     }
@@ -101,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+    // TODO: 04/02/2021 Este método debe borrar de la memoria las notas creadas a la vez que se limpiar de las SP
     protected void seekAndDestroy(){
-
     }
 }

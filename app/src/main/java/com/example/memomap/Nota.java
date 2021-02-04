@@ -2,6 +2,7 @@ package com.example.memomap;
 
 import java.util.Random;
 
+/**POJO de Nota*/
 public class Nota {
     private int id;
     private String titulo;
@@ -20,6 +21,7 @@ public class Nota {
     public int getId(){return id;}
     public String getTitulo(){return titulo;}
     public String getTexto(){return texto;}
+
     /**setId genera un número aleatorio en privado y se invoca solo desde el constructor
      * de la clase, buscando generar ids únicos y inalterables*/
     private void setId() {
@@ -28,6 +30,7 @@ public class Nota {
     }
     public void setTitulo(String titulo) {this.titulo = titulo;}
     public void setTexto(String texto) {this.texto = texto;}
+
     /**Devuelve un nombre de archivo basado en el título y el id*/
     public String generarNombreArchivo(){
         return titulo + "#" + Integer.toString(id);

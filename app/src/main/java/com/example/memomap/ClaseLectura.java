@@ -3,112 +3,44 @@ package com.example.memomap;
 import android.app.Activity;
 import android.content.res.Resources;
 import android.os.Environment;
-
 import androidx.core.content.ContextCompat;
-
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 
+/**Clase que realiza los procesos de lectura de archivos*/
 public class ClaseLectura {
     private BufferedReader br;
-    private boolean sdDisponible;
-    private boolean sdAccesoEscritura;
     private File sd;
-    private Resources recurso;
     private String texto;
 
+    /**Constructor*/
     public ClaseLectura(){
         sd = Environment.getExternalStorageDirectory();
     }
 
+    /**Método que lee de la memoria interna el archivo pedido por parámetro*/
     public String leerMemInterna(Activity activity, String registro_nota) throws IOException {
         texto = "";
-        System.out.println("============================");
-        System.out.println("leerMemInterna "+ registro_nota);
-        System.out.println("============================");
         br = new BufferedReader(new InputStreamReader(activity.openFileInput(registro_nota + ".txt")));
         String linea = null;
         while((linea = br.readLine())!=null){
             texto += linea;
         }
         br.close();
-        System.out.println("============================");
-        System.out.println("leerMemInterna "+ registro_nota);
-        System.out.println("============================");
         return texto;
     }
-    public String leerMemExterna(String registro_nota) throws IOException {
-        texto = "";
-        File dir = new File (sd.getAbsolutePath() + "/dat");
-        File archivoLectura = new File(dir, registro_nota + ".txt");
-        if(archivoLectura.exists()){
-            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(archivoLectura)));
-            String linea = null;
-            while((linea = br.readLine())!=null){
-                texto += linea;
-            }
-            br.close();
-        }
-        return texto;
-    }
-    // TODO: 29/01/2021 sd.canRead() devuelve false siempre
-    /*public String leerMemCompartida(String registro_nota) throws IOException {
-        System.out.println("============================");
-        System.out.println("lectura AbsolutePath: " + sd.getAbsolutePath());
-        System.out.println("lectura: " + sd.getAbsolutePath());
-        System.out.println("============================");
-        texto = "";
-        if(sd.canRead()){
-            File f = new File(sd, registro_nota + ".txt");
-            if(f.exists()){
-                br = new BufferedReader(new FileReader(f));
-                String linea = null;
-                while ((linea = br.readLine())!=null){
-                    texto += linea;
-                }
-                br.close();
-            }
-        }
-        System.out.println("============================");
-        System.out.println("lectura textp:" + texto);
-        System.out.println("============================");
-        return texto;
-    }*/
-    public String leerMemRAW(Activity activity){
-        return texto;
-    }
+    /**Método que lee de la tarjeta SD el archivo pedido por parámetro*/
     public String leerMemSD(Activity activity, String registro_nota) throws IOException {
-        EstadoSD();
         texto = "";
-        File[]Memoria = ContextCompat.getExternalFilesDirs(activity.getApplicationContext(),null);
+        File[] Memoria = ContextCompat.getExternalFilesDirs(activity.getApplicationContext(), null);
         File ruta = Memoria[0];
         File file = new File(ruta.getAbsolutePath(), registro_nota + ".txt");
         br = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
         texto = br.readLine();
         br.close();
         return texto;
-    }
-    public void EstadoSD(){
-        String cadena = "";
-        String estado = Environment.getExternalStorageState();
-        if(estado.equals(Environment.MEDIA_MOUNTED)){
-            sdDisponible = true;
-            sdAccesoEscritura = true;
-        }
-        else if(estado.equals(Environment.MEDIA_MOUNTED_READ_ONLY)){
-            sdDisponible = true;
-            sdAccesoEscritura = false;
-        }
-        else{
-            sdDisponible = false;
-            sdAccesoEscritura = false;
-        }
     }
 }

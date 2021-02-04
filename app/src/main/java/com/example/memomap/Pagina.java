@@ -1,5 +1,6 @@
 package com.example.memomap;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -9,21 +10,20 @@ import android.widget.EditText;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-
+/**Clase de la actividad pagina.xml*/
 public class Pagina extends AppCompatActivity {
     private EditText titulo;
     private EditText texto;
     private Button guardar;
     private Nota notaActiva;
-    private ControladorRW.Memoria memoria = ControladorRW.Memoria.SD;
+    private ControladorRW.Memoria memoria = ControladorRW.Memoria.INTERNA;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pagina);
+
+        obtenerMemoria(Pagina.this);
 
         titulo = (EditText) findViewById(R.id.pagina_titulo);
         texto = (EditText) findViewById(R.id.pagina_texto);
@@ -52,10 +52,6 @@ public class Pagina extends AppCompatActivity {
         if(getIntent().getIntExtra("id",-1)!=-1){
             if(getIntent().getStringExtra("titulo")!=null){
                 if(getIntent().getStringExtra("texto")!=null){
-                    /*System.out.println("===========================================================================");
-                    System.out.println("id: "+getIntent().getIntExtra("id",-1) +
-                            "titulo: " + getIntent().getStringExtra("titulo") + "texto: " + serializador.json_to_objeto(getIntent().getStringExtra("texto")).getTexto());
-                    System.out.println("===========================================================================");*/
                     notaActiva = new Nota(getIntent().getIntExtra("id",-1),getIntent().getStringExtra("titulo"),getIntent().getStringExtra("texto"));
                     titulo.setText(notaActiva.getTitulo());
                     System.out.println("============================");
@@ -86,18 +82,12 @@ public class Pagina extends AppCompatActivity {
         String json = serializador.objeto_to_json(nota);
 
         if(escribirFichero(json, nota.generarNombreArchivo())==true){
-            System.out.println("============================");
-            System.out.println("HA GUARDADO LA NOTA");
-            System.out.println("============================");
             guardarRegistroSP(nota.generarNombreArchivo());
         }
     }
-    /**Crea el archivo en base al nombre y escribe la cadena json en el*/
+    /**Crea el archivo en base al nombre y escribe la cadena json en él*/
     protected boolean escribirFichero(String json, String nombreArchivo){
         ControladorRW crw = new ControladorRW();
-        System.out.println("============================");
-        System.out.println("escribirFichero: " + nombreArchivo);
-        System.out.println("============================");
         return crw.escribirArchivo(Pagina.this, nombreArchivo, json, memoria);
     }
     /**Guarda en las SharedPreferences una String con los nombres de archivos concatenados*/
@@ -106,9 +96,6 @@ public class Pagina extends AppCompatActivity {
         SharedPreferences.Editor sp_editor = sp.edit();
 
         String registro = sp.getString("registro",null);
-        System.out.println("============================");
-        System.out.println("guardarRegistroSP: " + registro);
-        System.out.println("============================");
         if(registro!=null){
             sp_editor.putString("registro",registro + nombreArchivo +"%");
         }
@@ -116,5 +103,13 @@ public class Pagina extends AppCompatActivity {
             sp_editor.putString("registro",nombreArchivo + "%");
         }
         sp_editor.commit();
+    }
+    /**Obtiene de las SharedPreferences el tipo de memoria donde va a guardar las notas*/
+    private void obtenerMemoria(Activity activity) {
+        SharedPreferences sp = activity.getSharedPreferences("configuracion", Context.MODE_PRIVATE);
+        switch (sp.getString("lp_memoria", "INTERNA")){
+            case "Interna": memoria = ControladorRW.Memoria.INTERNA; break;
+            case "Externa": memoria = ControladorRW.Memoria.SD; break;
+        }
     }
 }

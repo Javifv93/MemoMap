@@ -1,33 +1,19 @@
 package com.example.memomap;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.res.Resources;
-import android.os.Environment;
-import android.view.View;
-import android.widget.Toast;
-
-import androidx.core.content.ContextCompat;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 
+/**Controlador entre las clases de lectura y escritura y la vista*/
 public class ControladorRW {
     private ClaseLectura lectura;
     private ClaseEscritura escritura;
-    public enum Memoria {INTERNA, EXTERNA, RAW, SD}
+    public enum Memoria {INTERNA, SD}
 
+    /**Constructor*/
     public ControladorRW(){};
 
+    /**Recibe una petición de lectura y en base al tipo de memoria definida la redirige al método de la clase de lectura para ese tipo de memoria*/
     public String leerArchivo(Activity activity, String registro_nota, Memoria tipoMemoria){
         lectura = new ClaseLectura();
         System.out.println("============================");
@@ -37,13 +23,7 @@ public class ControladorRW {
         try {
             switch (tipoMemoria){
                 case INTERNA: texto = lectura.leerMemInterna(activity,registro_nota); break;
-                case EXTERNA: texto = lectura.leerMemExterna(registro_nota); break;
-                //case COMPARTIDA: texto = lectura.leerMemCompartida(registro_nota); break;
-                case RAW: texto = lectura.leerMemRAW(activity); break;
                 case SD: texto = lectura.leerMemSD(activity, registro_nota);
-                    System.out.println("============================");
-                    System.out.println("texto leido:" + texto);
-                    System.out.println("============================");
                 break;
             }
         } catch (FileNotFoundException e) {
@@ -55,14 +35,12 @@ public class ControladorRW {
         }
         return texto;
     }
+    /**Recibe una petición de escritura y en base al tipo de memoria definida la redirige al método de la clase de escritura para ese tipo de memoria*/
     public boolean escribirArchivo(Activity activity,String nombreArchivo, String json, Memoria tipoMemoria){
         boolean todoOk = false;
         escritura = new ClaseEscritura();
         switch (tipoMemoria){
             case INTERNA: todoOk = escritura.escribirMemInterna(activity, nombreArchivo, json); break;
-            case EXTERNA: todoOk = escritura.escribirMemExterna(nombreArchivo, json); break;
-            //case COMPARTIDA: todoOk = escritura.escribirMemCompartida(nombreArchivo, json);
-            case RAW: break;
             case SD: todoOk = escritura.escribirMemSD(activity, nombreArchivo, json); break;
         }
         return todoOk;

@@ -11,9 +11,9 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.constraintlayout.widget.ConstraintLayout;
-
 import java.util.ArrayList;
 
+/**Adaptador del ListView*/
 public class AdaptadorLista extends ArrayAdapter<String> {
     private Activity activity;
     private ArrayList<Nota> listaNotas;
@@ -22,6 +22,7 @@ public class AdaptadorLista extends ArrayAdapter<String> {
     private ControladorRW.Memoria memoria = ControladorRW.Memoria.INTERNA;
     View vista;
 
+    /**Constructor. Obtiene la lista de notas de las SharedPreferences y las guarda en un ArrayList de Notas*/
     public AdaptadorLista(Activity activity, String registro_sp){
         super(activity, R.layout.nota);
         this.activity = activity;
@@ -31,36 +32,33 @@ public class AdaptadorLista extends ArrayAdapter<String> {
         for(int x=0;x<registro_split.length;x++){
             this.registroNotas.add(registro_split[x]);
             listaNotas.add(obtenerNota(registro_split[x]));
-            System.out.println("============================");
-            System.out.println("obteniendo nota!");
-            System.out.println("============================");
         }
         obtenerMemoria(activity);
     }
-
+    /**Obtiene de las SharedPreferences el tipo de memoria donde va a guardar las notas*/
     private void obtenerMemoria(Activity activity) {
         SharedPreferences sp = activity.getSharedPreferences("configuracion", Context.MODE_PRIVATE);
         switch (sp.getString("lp_memoria", "INTERNA")){
-            case "Interna": memoria = ControladorRW.Memoria.INTERNA; System.out.println("===========================INTERNA===================="); break;
-            case "Externa": memoria = ControladorRW.Memoria.SD;System.out.println("===========================EXTERNA===================="); break;
+            case "Interna": memoria = ControladorRW.Memoria.INTERNA; break;
+            case "Externa": memoria = ControladorRW.Memoria.SD; break;
         }
     }
-
+    /**Define el ViewHolder con los elementos de nota.xml sin definir*/
     static class ViewHolder{
         protected ConstraintLayout notaFondo;
         protected TextView notaNombre;
         protected ImageButton notaEdit;
         protected ImageButton notaBorrar;
     }
-
+    /**Devuelve el tamaño del ArrayList de Notas*/
     public int getCount(){
         return listaNotas.size();
     }
-
+    /**Devuelve la posición de un item*/
     public long getItemId(int position){
         return position;
     }
-
+    /**Devuelve la vista inflada de la nota*/
     public View getView(final int position, View convertView, final ViewGroup parent){
         View view = null;
         vista = convertView;
@@ -82,10 +80,6 @@ public class AdaptadorLista extends ArrayAdapter<String> {
                 intnt.putExtra("id", listaNotas.get(position).getId());
                 intnt.putExtra("titulo",listaNotas.get(position).getTitulo());
                 intnt.putExtra("texto",listaNotas.get(position).getTexto());
-                System.out.println("============================");
-                System.out.println("onClick adaptador: -id: "+ listaNotas.get(position).getId() +
-                        " titulo: "+ listaNotas.get(position).getTitulo() + " texto: " + listaNotas.get(position).getTexto());
-                System.out.println("============================");
                 activity.setResult(2,intnt);
                 activity.startActivity(intnt);
             }
@@ -96,12 +90,6 @@ public class AdaptadorLista extends ArrayAdapter<String> {
         viewHolder.notaEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("============================");
-                System.out.println("MEMORIA: "+ memoria);
-                System.out.println("============================");
-//                SelectorColor selectorColor = new SelectorColor();
-//                selectorColor.colorear_spectrum(v);
-//                viewHolder.notaFondo.setBackgroundColor(selectorColor.getColor());
             }
         });
 
@@ -119,12 +107,7 @@ public class AdaptadorLista extends ArrayAdapter<String> {
     protected Nota obtenerNota(String registro_nota){
         ControladorRW crw = new ControladorRW();
         String texto = crw.leerArchivo(activity,registro_nota, memoria);
-        System.out.println("============================");
-        System.out.println("obtenerNota:" + texto);
-        System.out.println("============================");
         Nota nota = new Nota(Integer.parseInt(registro_nota.split("#")[1]),registro_nota.split("#")[0], texto);
         return nota;
     }
 }
-// TODO: 29/01/2021 https://www.sgoliver.net/blog/ficheros-en-android-i-memoria-interna/ Para las preguntas
-// TODO: 29/01/2021 https://developer.android.com/training/data-storage
